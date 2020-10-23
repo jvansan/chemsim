@@ -69,6 +69,14 @@ def main():
     print("Numpy", np_time)
     print("Py", py_time)
 
+    print("**Soergel**")
+    print(utils.np_cosine(fps[0], fps[1]))
+    print(utils.py_cosine(fps[0], fps[1]))
+    np_time = mean_timing(lambda: utils.np_soergel_sim(fps[0], fps[1]))
+    py_time = mean_timing(lambda: utils.py_soergel_sim(fps[0], fps[1]))
+    print("Numpy", np_time)
+    print("Py", py_time)
+
 
 if __name__ == "__main__":
     main()

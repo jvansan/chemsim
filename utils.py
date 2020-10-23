@@ -21,7 +21,7 @@ def np_tanimoto(fp1, fp2):
     fp1 = np.array(fp1)
     fp2 = np.array(fp2)
 
-    return sum(np.logical_and(fp1, fp2)) / sum(np.logical_or(fp1, fp2))
+    return np.sum(np.logical_and(fp1, fp2)) / np.sum(np.logical_or(fp1, fp2))
 
 
 def popc_tanimoto(fp1, fp2):
@@ -56,7 +56,7 @@ def np_dice(fp1, fp2):
     fp1 = np.array(fp1)
     fp2 = np.array(fp2)
 
-    return 2 * sum(np.logical_and(fp1, fp2)) / (sum(fp1) + sum(fp2))
+    return 2 * np.sum(np.logical_and(fp1, fp2)) / (np.sum(fp1) + np.sum(fp2))
 
 
 def py_dice(fp1, fp2):
@@ -66,7 +66,23 @@ def py_dice(fp1, fp2):
     return 2 * popcount(fp1 & fp2) / (popcount(fp1) + popcount(fp2))
 
 
-def py_soergel(fp1, fp2):
+def np_soergel_dist(fp1, fp2):
+    """Using numpy logical operations"""
+    fp1 = np.array(fp1)
+    fp2 = np.array(fp2)
+    a = np.sum(fp1)
+    b = np.sum(fp1)
+    c = np.sum(fp1 & fp2)
+    return (a + b - 2.0 * c) / (a + b - c)
+
+
+def np_soergel_sim(fp1, fp2):
+    """Using Python bitwise operations
+    Soergel SIMILARITY"""
+    return 1.0 / (1 + np_soergel_dist(fp1, fp2))
+
+
+def py_soergel_dist(fp1, fp2):
     """Using Python bitwise operations
     Soergel DISTANCE is the complement of Tanimoto Similarity.
     """
@@ -76,6 +92,12 @@ def py_soergel(fp1, fp2):
     b = popcount(fp2)
     c = popcount(fp1 & fp2)
     return (a + b - 2.0 * c) / (a + b - c)
+
+
+def py_soergel_sim(fp1, fp2):
+    """Using Python bitwise operations
+    Soergel SIMILARITY"""
+    return 1.0 / (1 + py_soergel_dist(fp1, fp2))
 
 
 def rdkit_cosine(fp1, fp2):
