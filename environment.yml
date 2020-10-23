@@ -1,0 +1,7 @@
+name: atlas
+channels:
+  - rdkit
+  - defaults
+dependencies:
+  - numpy=1.19.1=py37hbc911f0_0
+  - rdkit=2020.09.1.0=py37hd50e099_1
