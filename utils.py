@@ -161,3 +161,23 @@ def np_manhattan_dist(fp1, fp2):
 def np_manhattan_sim(fp1, fp2):
     """Using numpy logical operations"""
     return _dist_to_sim(np_manhattan_dist, fp1, fp2)
+
+
+def py_euclidean_dist(fp1, fp2):
+    """Using Python bitwise operations"""
+    return sqrt(py_manhattan_dist(fp1, fp2))
+
+
+def py_euclidean_sim(fp1, fp2):
+    """Using numpy logical operations"""
+    return _dist_to_sim(py_euclidean_dist, fp1, fp2)
+
+
+def np_euclidean_dist(fp1, fp2):
+    """Using numpy logical operations"""
+    return np.sqrt(np_manhattan_dist(fp1, fp2))
+
+
+def np_euclidean_sim(fp1, fp2):
+    """Using numpy logical operations"""
+    return _dist_to_sim(np_euclidean_dist, fp1, fp2)
