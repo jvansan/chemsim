@@ -2,7 +2,7 @@
 
 A learning exercise in chemical similarity metrics.
 
-Comparing RDKit similarity to self-implementations.
+Comparing RDKit similarity to self-implementations. All functions are design to handle RDKit Fingerprints.
 
 Metrics implemented:
 
@@ -13,7 +13,9 @@ Metrics implemented:
 5. Euclidean\*
 6. Manhattan\*
 
-\* Distances converted to similarity as per https://jcheminf.biomedcentral.com/articles/10.1186/s13321-015-0069-3
+\* Distances converted to similarity as per [Equation 1 in ref.](https://jcheminf.biomedcentral.com/articles/10.1186/s13321-015-0069-3)
+
+**Equation 1**
 
 ```
 similarity = 1 / (1 + distance)
@@ -55,4 +57,16 @@ Py 3.5953760147094724e-05
 0.4357609900500941
 Numpy 0.006542242527008056
 Py 3.6862850189208985e-05
+
+**Manhattan**
+0.4357609900500941
+0.4357609900500941
+Numpy 0.00639375376701355
+Py 2.670145034790039e-05
 ```
+
+#### Useful resources:
+
+- http://www.dalkescientific.com/writings/diary/archive/2020/09/28/simple_fps_fingerprint_search.html
+- https://chem.libretexts.org/Courses/Intercollegiate_Courses/Cheminformatics_OLCC_(2019)/6%3A_Molecular_Similarity/6.2%3A_Similarity_Coefficients
+- https://www.sequentix.de/gelquest/help/distance_measures.htm

@@ -12,7 +12,6 @@ def smi2mfp4(smi):
 
 def rdkit_tanimoto(fp1, fp2):
     """Using builtin rdkit operations"""
-
     return DataStructs.TanimotoSimilarity(fp1, fp2)
 
 
@@ -66,6 +65,39 @@ def py_dice(fp1, fp2):
     return 2 * popcount(fp1 & fp2) / (popcount(fp1) + popcount(fp2))
 
 
+def rdkit_cosine(fp1, fp2):
+    """Using builtin rdkit operations"""
+    return DataStructs.CosineSimilarity(fp1, fp2)
+
+
+def np_cosine(fp1, fp2):
+    """Using numpy logical operations"""
+    fp1 = np.array(fp1)
+    fp2 = np.array(fp2)
+
+    return sum(np.logical_and(fp1, fp2)) / np.sqrt(sum(fp1) * sum(fp2))
+
+
+def py_cosine(fp1, fp2):
+    """Using Python bitwise operations"""
+    fp1 = int(fp1.ToBitString(), 2)
+    fp2 = int(fp2.ToBitString(), 2)
+
+    return popcount(fp1 & fp2) / sqrt(1.0 * popcount(fp1) * popcount(fp2))
+
+
+def np_cosine(fp1, fp2):
+    """Using numpy logical operations"""
+    fp1 = np.array(fp1)
+    fp2 = np.array(fp2)
+
+    return sum(np.logical_and(fp1, fp2)) / np.sqrt(sum(fp1) * sum(fp2))
+
+
+def _dist_to_sim(fn, fp1, fp2):
+    return 1.0 / (1 + fn(fp1, fp2))
+
+
 def np_soergel_dist(fp1, fp2):
     """Using numpy logical operations"""
     fp1 = np.array(fp1)
@@ -77,9 +109,8 @@ def np_soergel_dist(fp1, fp2):
 
 
 def np_soergel_sim(fp1, fp2):
-    """Using Python bitwise operations
-    Soergel SIMILARITY"""
-    return 1.0 / (1 + np_soergel_dist(fp1, fp2))
+    """Using numpy logical operations"""
+    return _dist_to_sim(np_soergel_dist, fp1, fp2)
 
 
 def py_soergel_dist(fp1, fp2):
@@ -95,29 +126,38 @@ def py_soergel_dist(fp1, fp2):
 
 
 def py_soergel_sim(fp1, fp2):
-    """Using Python bitwise operations
-    Soergel SIMILARITY"""
-    return 1.0 / (1 + py_soergel_dist(fp1, fp2))
-
-
-def rdkit_cosine(fp1, fp2):
-    """Using builtin rdkit operations"""
-
-    return DataStructs.CosineSimilarity(fp1, fp2)
-
-
-def np_cosine(fp1, fp2):
-    """Using numpy logical operations"""
-    fp1 = np.array(fp1)
-    fp2 = np.array(fp2)
-
-    return sum(np.logical_and(fp1, fp2)) / np.sqrt(sum(fp1) * sum(fp2))
-
-
-def py_cosine(fp1, fp2):
     """Using Python bitwise operations"""
+    return _dist_to_sim(py_soergel_dist, fp1, fp2)
 
+
+def py_manhattan_dist(fp1, fp2, xor=True):
+    """Using Python bitwise operations"""
+    # Both available for benchmarking
+    # In [3]: %timeit utils.py_manhattan_sim(fp1, fp2, xor=False)
+    # 34.9 µs ± 195 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+    # In [4]: %timeit utils.py_manhattan_sim(fp1, fp2, xor=True)
+    # 28.1 µs ± 1.06 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)
     fp1 = int(fp1.ToBitString(), 2)
     fp2 = int(fp2.ToBitString(), 2)
 
-    return popcount(fp1 & fp2) / sqrt(1.0 * popcount(fp1) * popcount(fp2))
+    if not xor:
+        return popcount(fp1) + popcount(fp2) - 2.0 * popcount(fp1 & fp2)
+    # XOR implementation equivalent to above
+    return popcount(fp1 ^ fp2)
+
+
+def py_manhattan_sim(fp1, fp2, xor=True):
+    """Using Python bitwise operations"""
+    return _dist_to_sim(lambda x, y: py_manhattan_dist(x, y, xor=xor), fp1, fp2)
+
+
+def np_manhattan_dist(fp1, fp2):
+    """Using numpy logical operations"""
+    fp1 = np.array(fp1)
+    fp2 = np.array(fp2)
+    return np.sum(np.logical_xor(fp1, fp2))
+
+
+def np_manhattan_sim(fp1, fp2):
+    """Using numpy logical operations"""
+    return _dist_to_sim(np_manhattan_dist, fp1, fp2)
