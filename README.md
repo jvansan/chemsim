@@ -2,7 +2,7 @@
 
 A learning exercise in chemical similarity metrics.
 
-Comparing RDKit similarity to self-implementations. All functions are design to handle RDKit Fingerprints.
+Comparing RDKit similarity to self-implementations. All functions are designed to handle RDKit Fingerprints.
 
 Metrics implemented:
 
