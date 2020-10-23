@@ -20,28 +20,28 @@ COMPOUNDS = [
 ]
 
 
-def mean_timing(fn, max_iter=1000):
-    times = []
-    for _ in range(max_iter):
-        start = time.time()
-        fn()
-        end = time.time()
-        times.append(end - start)
-    return sum(times) / len(times)
-
-
 def main():
     fps = [utils.smi2mfp4(c) for c in COMPOUNDS]
+
+    def mean_timing(fn, max_iter=1000):
+        times = []
+        for _ in range(max_iter):
+            for fp in fps:
+                start = time.time()
+                fn(fps[0], fp)
+                end = time.time()
+                times.append(end - start)
+        return sum(times) / len(times)
 
     # print("**Tanimoto**")
     # print(utils.rdkit_tanimoto(fps[0], fps[1]))
     # print(utils.np_tanimoto(fps[0], fps[1]))
     # print(utils.popc_tanimoto(fps[0], fps[1]))
     # print(utils.py_tanimoto(fps[0], fps[1]))
-    # rdk_time = mean_timing(lambda: utils.rdkit_tanimoto(fps[0], fps[1]))
-    # np_time = mean_timing(lambda: utils.np_tanimoto(fps[0], fps[1]))
-    # popc_time = mean_timing(lambda: utils.popc_tanimoto(fps[0], fps[1]))
-    # py_time = mean_timing(lambda: utils.py_tanimoto(fps[0], fps[1]))
+    # rdk_time = mean_timing(utils.rdkit_tanimoto)
+    # np_time = mean_timing(utils.np_tanimoto)
+    # popc_time = mean_timing(utils.popc_tanimoto)
+    # py_time = mean_timing(utils.py_tanimoto)
     # print("RDKit", rdk_time)
     # print("Numpy", np_time)
     # print("_popc", popc_time)
@@ -51,9 +51,9 @@ def main():
     # print(utils.rdkit_dice(fps[0], fps[1]))
     # print(utils.np_dice(fps[0], fps[1]))
     # print(utils.py_dice(fps[0], fps[1]))
-    # rdk_time = mean_timing(lambda: utils.rdkit_dice(fps[0], fps[1]))
-    # np_time = mean_timing(lambda: utils.np_dice(fps[0], fps[1]))
-    # py_time = mean_timing(lambda: utils.py_dice(fps[0], fps[1]))
+    # rdk_time = mean_timing(utils.rdkit_dice)
+    # np_time = mean_timing(utils.np_dice)
+    # py_time = mean_timing(utils.py_dice)
     # print("RDKit", rdk_time)
     # print("Numpy", np_time)
     # print("Py", py_time)
@@ -62,36 +62,36 @@ def main():
     # print(utils.rdkit_cosine(fps[0], fps[1]))
     # print(utils.np_cosine(fps[0], fps[1]))
     # print(utils.py_cosine(fps[0], fps[1]))
-    # rdk_time = mean_timing(lambda: utils.rdkit_cosine(fps[0], fps[1]))
-    # np_time = mean_timing(lambda: utils.np_cosine(fps[0], fps[1]))
-    # py_time = mean_timing(lambda: utils.py_cosine(fps[0], fps[1]))
+    # rdk_time = mean_timing(utils.rdkit_cosine)
+    # np_time = mean_timing(utils.np_cosine)
+    # py_time = mean_timing(utils.py_cosine)
     # print("RDKit", rdk_time)
     # print("Numpy", np_time)
     # print("Py", py_time)
 
-    # print("**Soergel**")
-    # print(utils.np_cosine(fps[0], fps[1]))
-    # print(utils.py_cosine(fps[0], fps[1]))
-    # np_time = mean_timing(lambda: utils.np_soergel_sim(fps[0], fps[1]))
-    # py_time = mean_timing(lambda: utils.py_soergel_sim(fps[0], fps[1]))
+    print("**Soergel**")
+    print(utils.np_soergel_sim(fps[0], fps[1]))
+    print(utils.py_soergel_sim(fps[0], fps[1]))
+    np_time = mean_timing(utils.np_soergel_sim)
+    py_time = mean_timing(utils.py_soergel_sim)
+    print("Numpy", np_time)
+    print("Py", py_time)
+
+    # print("**Manhattan**")
+    # print(utils.np_manhattan_sim(fps[0], fps[1]))
+    # print(utils.py_manhattan_sim(fps[0], fps[1]))
+    # np_time = mean_timing(utils.np_manhattan_sim)
+    # py_time = mean_timing(utils.py_manhattan_sim)
     # print("Numpy", np_time)
     # print("Py", py_time)
 
-    print("**Manhattan**")
-    print(utils.np_manhattan_sim(fps[0], fps[1]))
-    print(utils.py_manhattan_sim(fps[0], fps[1]))
-    np_time = mean_timing(lambda: utils.np_manhattan_sim(fps[0], fps[1]))
-    py_time = mean_timing(lambda: utils.py_manhattan_sim(fps[0], fps[1]))
-    print("Numpy", np_time)
-    print("Py", py_time)
-
-    print("**Euclidean**")
-    print(utils.np_euclidean_sim(fps[0], fps[1]))
-    print(utils.py_euclidean_sim(fps[0], fps[1]))
-    np_time = mean_timing(lambda: utils.np_euclidean_sim(fps[0], fps[1]))
-    py_time = mean_timing(lambda: utils.py_euclidean_sim(fps[0], fps[1]))
-    print("Numpy", np_time)
-    print("Py", py_time)
+    # print("**Euclidean**")
+    # print(utils.np_euclidean_sim(fps[0], fps[1]))
+    # print(utils.py_euclidean_sim(fps[0], fps[1]))
+    # np_time = mean_timing(utils.np_euclidean_sim)
+    # py_time = mean_timing(utils.py_euclidean_sim)
+    # print("Numpy", np_time)
+    # print("Py", py_time)
 
 
 if __name__ == "__main__":

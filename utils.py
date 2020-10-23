@@ -103,7 +103,7 @@ def np_soergel_dist(fp1, fp2):
     fp1 = np.array(fp1)
     fp2 = np.array(fp2)
     a = np.sum(fp1)
-    b = np.sum(fp1)
+    b = np.sum(fp2)
     c = np.sum(fp1 & fp2)
     return (a + b - 2.0 * c) / (a + b - c)
 
